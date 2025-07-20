@@ -202,10 +202,6 @@
                     <div class="bg-white p-6 rounded-2xl shadow-md">
                          <div class="flex justify-between items-center mb-4">
                             <h2 class="text-2xl font-bold text-gray-800">Daftar Petani</h2>
-                            <button id="download-petani" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white text-sm hover:bg-blue-700 transition-colors">
-                                <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                <span>Download CSV</span>
-                            </button>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left">
@@ -266,10 +262,6 @@
                     <div class="bg-white p-6 rounded-2xl shadow-md">
                         <div class="flex justify-between items-center mb-4">
                             <h2 class="text-2xl font-bold text-gray-800">Daftar Lahan</h2>
-                            <button id="download-lahan" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white text-sm hover:bg-blue-700 transition-colors">
-                                <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                <span>Download CSV</span>
-                            </button>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left">
@@ -338,10 +330,6 @@
                     <div class="bg-white p-6 rounded-2xl shadow-md">
                         <div class="flex justify-between items-center mb-4">
                             <h2 class="text-2xl font-bold text-gray-800">Daftar Alat</h2>
-                            <button id="download-alat" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white text-sm hover:bg-blue-700 transition-colors">
-                                <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                <span>Download CSV</span>
-                            </button>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left">
@@ -401,10 +389,6 @@
                     <div class="bg-white p-6 rounded-2xl shadow-md">
                         <div class="flex justify-between items-center mb-4">
                             <h2 class="text-2xl font-bold text-gray-800">Daftar Tanaman</h2>
-                            <button id="download-tanaman" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white text-sm hover:bg-blue-700 transition-colors">
-                                <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                <span>Download CSV</span>
-                            </button>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left">
@@ -485,10 +469,6 @@
                     <div class="bg-white p-6 rounded-2xl shadow-md">
                         <div class="flex justify-between items-center mb-4">
                             <h2 class="text-2xl font-bold text-gray-800">Riwayat Penyiraman</h2>
-                            <button id="download-penyiraman" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white text-sm hover:bg-blue-700 transition-colors">
-                                <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                <span>Download CSV</span>
-                            </button>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left">
@@ -1255,86 +1235,6 @@ document.addEventListener('DOMContentLoaded', () => {
         showAlert('Rekomendasi Dihasilkan', 'Formulir di bawah telah diisi dengan rekomendasi penyiraman. Silakan periksa dan simpan.');
     });
     
-    // =================================================================================
-    // FUNGSI DOWNLOAD CSV
-    // =================================================================================
-    const downloadCSV = (data, filename, headerMapping) => {
-        if (!data || data.length === 0) {
-            showAlert('Info', 'Tidak ada data untuk diunduh.');
-            return;
-        }
-        
-        const headers = Object.keys(headerMapping);
-        const csvRows = [headers.join(',')];
-
-        for (const row of data) {
-            const values = headers.map(header => {
-                const key = headerMapping[header];
-                let val = row[key];
-                if (val === null || val === undefined) {
-                    val = '';
-                }
-                const stringVal = String(val).replace(/"/g, '""');
-                return `"${stringVal}"`;
-            });
-            csvRows.push(values.join(','));
-        }
-
-        const csvString = csvRows.join('\n');
-        const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.setAttribute('href', url);
-        a.setAttribute('download', `${filename}.csv`);
-        a.style.display = 'none';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-    };
-
-    document.getElementById('download-petani').addEventListener('click', () => {
-        const headerMapping = { 'ID': 'id_petani', 'Nama': 'nama_petani', 'No HP': 'no_hp', 'Alamat': 'alamat' };
-        downloadCSV(db.petani, 'data_petani', headerMapping);
-    });
-
-    document.getElementById('download-lahan').addEventListener('click', () => {
-        const headerMapping = { 'ID': 'id_lahan', 'Petani': 'petani', 'Lokasi': 'lokasi', 'Luas (m2)': 'luas', 'Kelembapan (%)': 'kelembapan', 'Status': 'status_lahan' };
-        const data = db.lahan.map(l => ({ ...l, petani: db.petani.find(p => p.id_petani === l.id_petani)?.nama_petani || 'N/A' }));
-        downloadCSV(data, 'data_lahan', headerMapping);
-    });
-    
-    document.getElementById('download-alat').addEventListener('click', () => {
-        const headerMapping = { 'ID': 'id_alat', 'Nama Alat': 'nama_alat', 'Tipe Sensor': 'tipe_sensor', 'Status': 'status_alat', 'Kondisi': 'kondisi_alat', 'Lokasi': 'lokasi' };
-        const data = db.alat.map(a => ({ ...a, lokasi: db.lahan.find(l => l.id_lahan === a.id_lahan)?.lokasi || 'Tidak Terpasang' }));
-        downloadCSV(data, 'data_alat', headerMapping);
-    });
-    
-    document.getElementById('download-tanaman').addEventListener('click', () => {
-        const headerMapping = { 'ID': 'id_tanaman', 'Lokasi Lahan': 'lokasi_lahan', 'Jenis Jagung': 'jenis_jagung', 'Tgl Tanam': 'tgl_tanam', 'Umur Panen (Hari)': 'umur_panen' };
-        const data = db.tanaman.map(t => ({ ...t, lokasi_lahan: db.lahan.find(l => l.id_lahan === t.id_lahan)?.lokasi || 'N/A' }));
-        downloadCSV(data, 'data_tanaman', headerMapping);
-    });
-    
-    document.getElementById('download-penyiraman').addEventListener('click', () => {
-        const headerMapping = { 'ID': 'id_penyiraman', 'Petani': 'petani', 'Lokasi Lahan': 'lokasi_lahan', 'Alat': 'alat', 'Waktu Siram': 'waktu_siram', 'Target Kelembapan (%)': 'target_kelembapan', 'Durasi (Menit)': 'durasi', 'Volume (Liter)': 'volume_air' };
-        const data = db.penyiraman.map(py => {
-            const lahan = db.lahan.find(l => l.id_lahan === py.id_lahan);
-            const petani = lahan ? db.petani.find(p => p.id_petani === lahan.id_petani) : null;
-            const alat = db.alat.find(a => a.id_alat === py.id_alat);
-            return {
-                id_penyiraman: py.id_penyiraman,
-                petani: petani?.nama_petani || 'N/A',
-                lokasi_lahan: lahan?.lokasi || 'N/A',
-                alat: alat?.nama_alat || '-',
-                waktu_siram: formatDateTime(py.tgl_waktu_siram),
-                target_kelembapan: py.target_kelembapan,
-                durasi: py.durasi,
-                volume_air: py.volume_air
-            };
-        });
-        downloadCSV(data, 'riwayat_penyiraman', headerMapping);
-    });
-
     // =================================================================================
     // INITIALIZATION
     // =================================================================================
